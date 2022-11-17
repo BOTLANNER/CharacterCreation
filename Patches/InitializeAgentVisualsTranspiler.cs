@@ -7,6 +7,7 @@ using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using TaleWorlds.Core;
+using TaleWorlds.Engine;
 using TaleWorlds.Library;
 using TaleWorlds.MountAndBlade;
 using TaleWorlds.MountAndBlade.View;
@@ -25,6 +26,7 @@ namespace CharacterCreation.Patches
 
         public static bool Prepare(MethodBase original)
         {
+            if (!DCCSettingsUtil.Instance.PatchSavePreviewGenderBug) return false;
             if (original == null) return true;
             var info = Harmony.GetPatchInfo(original);
             if (info == default || info.Transpilers.Select(x => x.owner).Intersect(incompatibleInstances).IsEmpty())
@@ -54,7 +56,7 @@ namespace CharacterCreation.Patches
             {
                 for (; i >= 0; i--)
                 {
-                    if (code[i].opcode == OpCodes.Ldloc_S && code[i].operand is LocalBuilder lb && lb.LocalIndex == 5)
+                    if (code[i].opcode == OpCodes.Ldloc_S && code[i].operand is LocalBuilder lb && lb.LocalIndex == 4)
                     {
                         // replace current instruction
                         code[i] = new CodeInstruction(OpCodes.Ldfld, AccessTools.Field(typeof(BasicCharacterTableau), "_isFemale"));

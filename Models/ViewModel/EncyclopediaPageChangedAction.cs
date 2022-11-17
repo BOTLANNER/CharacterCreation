@@ -1,15 +1,12 @@
 ﻿#nullable enable
 using HarmonyLib;
-using SandBox.GauntletUI;
 using SandBox.GauntletUI.Encyclopedia;
 using SandBox.View.Map;
 using System;
-using System.Reflection;
 using System.Windows.Forms;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia;
 using TaleWorlds.CampaignSystem.ViewModelCollection.Encyclopedia.Pages;
-using TaleWorlds.Core;
 using TaleWorlds.Engine.GauntletUI;
 using TaleWorlds.GauntletUI.Data;
 using TaleWorlds.Library;
@@ -22,18 +19,12 @@ namespace CharacterCreation.Models
     {
         private HeroBuilderVM? viewModel;
         private EncyclopediaHeroPageVM? selectedHeroPage;
-        private HeroBuilderModel? heroModel;
         private Hero? selectedHero;
         private ScreenBase? gauntletLayerTopScreen;
         private GauntletLayer? gauntletLayer;
         private IGauntletMovie? gauntletMovie;
 
         //public static Type HeroBuilderVMType { get; internal set; } = typeof(HeroBuilderVM);
-
-        public EncyclopediaPageChangedAction(HeroBuilderModel model)
-        {
-            heroModel = model;
-        }
 
         public void OnEncyclopediaPageChanged(EncyclopediaPageChangedEvent e)
         {
@@ -64,7 +55,7 @@ namespace CharacterCreation.Models
 
             EncyclopediaData? encyclopediaData = AccessTools.Field(typeof(GauntletMapEncyclopediaView), "_encyclopediaData").GetValue(gauntletEncyclopediaScreenManager) as EncyclopediaData;
             EncyclopediaPageVM? encyclopediaPageVM = AccessTools.Field(typeof(EncyclopediaData), "_activeDatasource").GetValue(encyclopediaData) as EncyclopediaPageVM;
-            selectedHeroPage = (encyclopediaPageVM as EncyclopediaHeroPageVM);
+            selectedHeroPage = encyclopediaPageVM as EncyclopediaHeroPageVM;
 
             if (selectedHeroPage == null)
             {
@@ -75,7 +66,7 @@ namespace CharacterCreation.Models
             {
                 return;
             }
-            gauntletLayer ??= new GauntletLayer(211);
+            gauntletLayer ??= new GauntletLayer(311);
 
             try
             {
